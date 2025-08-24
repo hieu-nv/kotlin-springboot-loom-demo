@@ -36,16 +36,14 @@ class WebClientConfiguration(
 
 
     @Bean(TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME)
-    fun asyncTaskExecutor(@Value("\${server.tomcat.threads.max}") maxThreads:Int): AsyncTaskExecutor? {
-        return TaskExecutorAdapter(Executors.newFixedThreadPool(maxThreads))
+    fun asyncTaskExecutor(): AsyncTaskExecutor {
+        return TaskExecutorAdapter(Executors.newVirtualThreadPerTaskExecutor())
     }
 
     @Bean
-    fun protocolHandlerVirtualThreadExecutorCustomizer(@Value("\${server.tomcat.threads.max}") maxThreads:Int): TomcatProtocolHandlerCustomizer<*>? {
+    fun protocolHandlerVirtualThreadExecutorCustomizer(): TomcatProtocolHandlerCustomizer<*> {
         return TomcatProtocolHandlerCustomizer<org.apache.coyote.ProtocolHandler> { protocolHandler: org.apache.coyote.ProtocolHandler ->
-            protocolHandler.setExecutor(
-                Executors.newFixedThreadPool(maxThreads)
-            )
+            protocolHandler.setExecutor(Executors.newVirtualThreadPerTaskExecutor())
         }
     }
 }

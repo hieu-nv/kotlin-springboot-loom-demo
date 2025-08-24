@@ -1,1 +1,1 @@
-docker build -t avatar-server .
+podman build -t avatar-server .

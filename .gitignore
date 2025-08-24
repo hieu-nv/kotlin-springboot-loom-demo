@@ -28,4 +28,5 @@ target/
 
 # Kotlin
 .kotlintest
-
+__pycache__/
+commit_message.txt
